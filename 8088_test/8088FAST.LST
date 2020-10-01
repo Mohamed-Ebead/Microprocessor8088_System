@@ -1,0 +1,94 @@
+Microsoft (R) Macro Assembler Version 5.10                  11/12/18 22:09:4
+                                                             Page     1-1
+
+
+				;test8088.asm
+				
+				.MODEL small                ;64K Max Size
+				assume cs:@code,ds:@data,ss:@data
+				
+				;****************************
+ = 0020				PORTA equ 20h
+ = 0040				PORTB equ 40h
+				;****************************
+				
+				.CODE
+ 0000				_TEXT segment 'CODE'
+					
+ 0000				         ORG     0000h            ;Start of cod
+				e	
+				
+ 0000  90			init:    nop
+ 0001  E4 20			 	 in al, PORTA            ; input a byte
+				 from PORTA  
+ 0003  8A D8			         mov bl, al   	 
+				
+ 0005  F6 D0			outport: not al
+ 0007  E6 40			         out PORTB, al           ; output the b
+				yte to PORTB
+					
+ 0009  BA 3000				 mov dx, 03000h
+ 000C  4A			delay:	 dec dx
+ 000D  75 FD				 jnz delay
+					
+ 000F  FE C3				 inc bl
+ 0011  8A C3			         mov al, bl
+ 0013  EB F0				 jmp outport
+					
+ 0015  CC				 INT 3                  ;Halt
+					
+ 0FF0					 ORG	0FF0h         ;restart address 
+				(FFFF:0000)
+				 
+ 0FF0				startup: 
+ 0FF0  90				nop
+ 0FF1  FA				cli                   ;disable interrup
+				ts
+ 0FF2  E9 0000 R			jmp init              ;jump to the star
+				t of the program 
+				
+					end startup
+ 0FF5				@CurSeg ends
+Microsoft (R) Macro Assembler Version 5.10                  11/12/18 22:09:4
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0000	WORD	PUBLIC	'DATA'
+_TEXT  . . . . . . . . . . . . .  	0FF5	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+DELAY  . . . . . . . . . . . . .  	L NEAR	000C	_TEXT
+
+INIT . . . . . . . . . . . . . .  	L NEAR	0000	_TEXT
+
+OUTPORT  . . . . . . . . . . . .  	L NEAR	0005	_TEXT
+
+PORTA  . . . . . . . . . . . . .  	NUMBER	0020	
+PORTB  . . . . . . . . . . . . .  	NUMBER	0040	
+
+STARTUP  . . . . . . . . . . . .  	L NEAR	0FF0	_TEXT
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  _8088fast		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+     38 Source  Lines
+     38 Total   Lines
+     22 Symbols
+
+  45950 + 445518 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
